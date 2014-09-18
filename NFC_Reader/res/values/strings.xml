@@ -2,12 +2,14 @@
 <resources>
 
     <string name="app_name">NFC_Reader</string>
-    <string name="nfcid">NFC ID:</string>
+    <string name="nfcid">NFC tag content:</string>
     <string name="action_settings">Settings</string>
     <string name="name">Schülername:</string>
     <string name="error_detected">Error detected!</string>
     <string name="ok_writing">ok writing!</string>
     <string name="error_writing">Error writing!</string>
     <string name="ok_detection">Ok detection!</string>
+    <string name="nfctype">Tag beschreiben:</string>
+    <string name="write">Beschreiben</string>
 
 </resources>

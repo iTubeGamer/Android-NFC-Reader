@@ -28,8 +28,8 @@ public final class R {
         public static final int LinearLayout2=0x7f090000;
         public static final int action_settings=0x7f090006;
         public static final int button=0x7f090005;
-        public static final int editText1=0x7f090002;
-        public static final int editText2=0x7f090004;
+        public static final int etTagContent=0x7f090002;
+        public static final int etTagType=0x7f090004;
         public static final int textView1=0x7f090001;
         public static final int textView2=0x7f090003;
     }
@@ -46,8 +46,10 @@ public final class R {
         public static final int error_writing=0x7f060006;
         public static final int name=0x7f060003;
         public static final int nfcid=0x7f060001;
+        public static final int nfctype=0x7f060008;
         public static final int ok_detection=0x7f060007;
         public static final int ok_writing=0x7f060005;
+        public static final int write=0x7f060009;
     }
     public static final class style {
         /** 
