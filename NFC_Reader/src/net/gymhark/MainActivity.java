@@ -2,7 +2,6 @@ package net.gymhark;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -17,7 +16,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +42,7 @@ public class MainActivity extends Activity {
 		};
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	    Button btnWrite = (Button) findViewById(R.id.button);
+	    Button btnWrite = (Button) findViewById(R.id.btnZuweisen);
 	    mTextView = (TextView)findViewById(R.id.textView1);
 	    mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 	    
@@ -66,14 +64,8 @@ public class MainActivity extends Activity {
 	    {
 	        @Override
 	        public void onClick(View v) {	
-	        	TextView tvmode = (TextView) findViewById(R.id.tvMode);
-	        	if (readmode ==(true)){
-	        		readmode = false;
-	        		tvmode.setText("Writing Mode");
-	        	} else {
-	        		readmode = true;
-	        		tvmode.setText("Reading Mode");
-	        	}
+	        	readmode=false;
+	        	setContentView(R.layout.scan);
 	        }
 	    });    
 	    
@@ -149,6 +141,7 @@ public class MainActivity extends Activity {
 			    	 Toast.makeText(this, "Tag not recognized!", Toast.LENGTH_SHORT ).show();
 			    }
     	} else {
+    		
     		EditText etwrite = (EditText) findViewById(R.id.etTagWrite);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			String nfcMessage = etwrite.getText().toString();

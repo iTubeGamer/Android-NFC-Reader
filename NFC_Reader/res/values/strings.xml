@@ -9,7 +9,11 @@
     <string name="ok_writing">ok writing!</string>
     <string name="error_writing">Error writing!</string>
     <string name="ok_detection">Ok detection!</string>
-    <string name="nfctype">Tag beschreiben:</string>
+    <string name="tagschuelerzuweisung">Tag zuweisen!</string>
     <string name="write">Modus wechseln</string>
+    <string name="schueler">Schüler: </string>
+    <string name="id">Schüler-ID:</string>
+    <string name="maxmuster">Max Mustermann</string>
+    <string name="musterid">0058</string>
 
 </resources>
