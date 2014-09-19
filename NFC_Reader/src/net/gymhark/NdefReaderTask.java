@@ -87,8 +87,8 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
-        	 EditText ettagcontent= (EditText)activity.findViewById(R.id.etTagContent);
-        	 ettagcontent.setText(result);
+        	TextView schuelerid = (TextView) activity.findViewById(R.id.tvgetSchuelerId);
+        	 schuelerid.setText(result);
             System.out.println("Read content: " + result);
         }
     }

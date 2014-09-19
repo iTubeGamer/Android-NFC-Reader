@@ -6,48 +6,97 @@
     android:orientation="vertical"
     tools:context="net.gymhark.MainActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/schueler" />
-
-    <EditText
-        android:id="@+id/etTagContent"
+    <TabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:ems="10" >
+        android:layout_height="match_parent" >
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/id" />
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </TabWidget>
 
-    <EditText
-        android:id="@+id/etTagWrite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:ems="10"
-        android:enabled="true" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/btnZuweisen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/tagschuelerzuweisung" />
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                      android:orientation="vertical" >
+                    
+                      <TextView
+        				android:id="@+id/textView1"
+        				android:layout_width="wrap_content"
+       					android:layout_height="wrap_content"
+        				android:layout_marginLeft="20dp"
+        				android:layout_marginStart="20dp"
+        				android:layout_marginTop="20dp"
+        				android:text="@string/schueler" />
+
+    				<EditText
+       				 android:id="@+id/etSchueler"
+        				android:layout_width="match_parent"
+        				android:layout_height="wrap_content"
+        				android:layout_marginLeft="20dp"
+        				android:layout_marginStart="20dp"
+        				android:layout_marginRight="20dp"
+        				android:ems="10" >
+
+        				<requestFocus />
+    				</EditText>
+
+    				<TextView
+        				android:id="@+id/textView2"
+        				android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+        				android:layout_marginLeft="20dp"
+        				android:layout_marginStart="20dp"
+        				android:layout_marginTop="10dp"
+        				android:text="@string/id" />
+
+    				<EditText
+        				android:id="@+id/etId"
+        				android:layout_width="match_parent"
+        				android:layout_height="wrap_content"
+        				android:layout_marginLeft="20dp"
+        				android:layout_marginRight="20dp"
+        				android:ems="10"
+        				android:enabled="true" />
+
+    				<Button
+        				android:id="@+id/btnZuweisen"
+        				android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+        				android:layout_marginLeft="20dp"
+        				android:layout_marginStart="20dp"
+        				android:layout_marginTop="10dp"
+        				android:text="@string/tagschuelerzuweisung" />
+                    
+                    
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+    				
+                    <include layout="@layout/tab2" />
+                    
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+  
 
 </LinearLayout>

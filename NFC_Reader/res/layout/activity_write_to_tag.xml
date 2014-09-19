@@ -1,32 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="net.gymhark.WriteToTag" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingEnd="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp" >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:orientation="horizontal"
+      android:paddingBottom="10dp"
+      android:paddingEnd="20dp"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:paddingStart="20dp"
+      android:paddingTop="20dp" >
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/schueler" />
+            android:text="@string/schueler"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvSchueler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/maxmuster" />
+            android:layout_marginStart="10dp"
+            android:text="@string/maxmuster"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -42,14 +51,17 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/id" />
+            android:text="@string/id"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/musterid" />
+            android:text="@string/musterid"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <ImageView
@@ -62,4 +74,4 @@
         android:layout_marginTop="40dp"
         android:src="@drawable/nfc_icon" />
 
-</LinearLayout>
+</RelativeLayout>

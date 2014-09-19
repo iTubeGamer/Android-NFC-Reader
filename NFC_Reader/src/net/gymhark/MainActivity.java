@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,18 +32,28 @@ public class MainActivity extends Activity {
     Tag mTag;
     public TextView mTextView;
     private NfcAdapter mNfcAdapter;
-    private boolean readmode;
-    
+    public final static String SCHUELER_ID = "net.gymhark.nfcreader.schuelerid";
+    public final static String SCHUELER_NAME = "net.gymhark.nfcreader.schuelername";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (readmode = true){
-		} else if (readmode = false) {
-		} else {
-			readmode = true;
-		};
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		TabHost tabHost=(TabHost)findViewById(android.R.id.tabhost);
+		tabHost.setup();
+
+		TabSpec spec1=tabHost.newTabSpec("Zuweisen");
+		spec1.setContent(R.id.tab1);
+		spec1.setIndicator("Zuweisen");
+
+		TabSpec spec2=tabHost.newTabSpec("Auslesen");
+		spec2.setIndicator("Auslesen");
+		spec2.setContent(R.id.tab2);
+		
+		tabHost.addTab(spec1);
+		tabHost.addTab(spec2);
+		
 	    Button btnWrite = (Button) findViewById(R.id.btnZuweisen);
 	    mTextView = (TextView)findViewById(R.id.textView1);
 	    mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -63,16 +75,21 @@ public class MainActivity extends Activity {
 	    btnWrite.setOnClickListener(new View.OnClickListener()
 	    {
 	        @Override
-	        public void onClick(View v) {	
-	        	readmode=false;
-	        	setContentView(R.layout.scan);
+	        public void onClick(View v) {
+	        	sendMessage(v);
 	        }
 	    });    
-	    
-	    
-	    handleIntent(getIntent());
+	   // handleIntent(getIntent());
 	}
 
+	public void sendMessage(View view) {
+    	EditText etId = (EditText) findViewById(R.id.etId);
+    	EditText etSchueler = (EditText) findViewById(R.id.etSchueler);
+		Intent intent = new Intent(this, WriteToTag.class);
+    	intent.putExtra(SCHUELER_ID, etId.getText().toString());
+    	intent.putExtra(SCHUELER_NAME, etSchueler.getText().toString());
+    	startActivity(intent);
+	}
 	
 	@Override
     protected void onResume() {
@@ -91,15 +108,11 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onNewIntent(Intent intent){
-			handleIntent(intent);
-			
+			handleIntent(intent);		
 	}
 	
 	
 	private void handleIntent(Intent intent) { 
-		
-		if (readmode ==(true)){
-			Toast.makeText(this, "Reading...", Toast.LENGTH_SHORT ).show();
 			System.out.println("reading...");
 			mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			  String action = intent.getAction();
@@ -138,21 +151,7 @@ public class MainActivity extends Activity {
 			        }
 			    } else {
 			    	 System.out.println("Tag not recognized!");
-			    	 Toast.makeText(this, "Tag not recognized!", Toast.LENGTH_SHORT ).show();
 			    }
-    	} else {
-    		
-    		EditText etwrite = (EditText) findViewById(R.id.etTagWrite);
-			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			String nfcMessage = etwrite.getText().toString();
-	        try {
-				writeTag(this, tag, nfcMessage);
-			} catch (IOException | FormatException e) {
-				System.out.println("ioexception while writing");
-				e.printStackTrace();
-			}
-    	}
-	
 		
     }
 	
@@ -178,12 +177,7 @@ public class MainActivity extends Activity {
 	        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
 	    }
 	 
-	    /**
-	     * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-	     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
-	     */
-	 
-	 
+
 	    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
 	        adapter.disableForegroundDispatch(activity);
 	    }
