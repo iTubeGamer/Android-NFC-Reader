@@ -1,7 +1,11 @@
 package net.gymhark;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.FileChannel;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -17,6 +21,7 @@ import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -221,5 +226,7 @@ public class MainActivity extends Activity {
 	        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
 	        return recordNFC;
 	    }
+	    
+	
 
 }
