@@ -12,6 +12,7 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -85,11 +86,26 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
     }
      
     @Override
-    protected void onPostExecute(String result) {
-        if (result != null) {
-        	TextView schuelerid = (TextView) activity.findViewById(R.id.tvgetSchuelerId);
-        	 schuelerid.setText(result);
-            System.out.println("Read content: " + result);
+    protected void onPostExecute(String tagContent) {
+        if (tagContent != null) {
+        	handleTag(tagContent);
         }
+    }
+    
+    public void handleTag(String tagContent){
+    	System.out.println("Read content: " + tagContent);
+    	TextView schuelerid = (TextView) activity.findViewById(R.id.tvgetSchuelerId);
+    	TextView schuelerzeit = (TextView) activity.findViewById(R.id.tvSchuelerZeit);
+   	 	StopWatch stopwatch = new StopWatch();
+   	 	
+   	 	if (schuelerid.getText().toString().equals(tagContent)){
+   	 		stopwatch.stop();
+   	 		schuelerzeit.setText(Long.valueOf(stopwatch.getElapsedTimeMilli()).toString());
+   	 	} else {
+   	 		stopwatch.reset();
+   	 		stopwatch.start();
+   	 		schuelerid.setText(tagContent);
+   	 	}
+       
     }
 }

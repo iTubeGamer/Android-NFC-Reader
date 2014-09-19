@@ -49,9 +49,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int textView1=0x7f0a0002;
         public static final int textView2=0x7f0a0004;
         public static final int textView3=0x7f0a0009;
-        public static final int textView4=0x7f0a000d;
         public static final int tvId=0x7f0a000a;
         public static final int tvSchueler=0x7f0a0008;
+        public static final int tvSchuelerZeit=0x7f0a000d;
         public static final int tvgetSchuelerId=0x7f0a000c;
     }
     public static final class layout {
@@ -81,6 +81,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ok_writing=0x7f070005;
         public static final int ready=0x7f070011;
         public static final int schueler=0x7f07000a;
+        public static final int start=0x7f070016;
+        public static final int stop=0x7f070017;
         public static final int tagschuelerzuweisung=0x7f070008;
         public static final int title_activity_write__nfc=0x7f07000e;
         public static final int title_activity_write_to_tag=0x7f070012;

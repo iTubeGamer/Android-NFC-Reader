@@ -14,7 +14,7 @@
     <string name="schueler">Schüler: </string>
     <string name="id">Schüler-ID:</string>
     <string name="maxmuster">Max Mustermann</string>
-    <string name="musterid">0058</string>
+    <string name="musterid"> - </string>
     <string name="title_activity_write__nfc">Write to NFC-Tag</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -22,6 +22,8 @@
     <string name="title_activity_write_to_tag">WriteToTag</string>
     <string name="hello_world">Hello world!</string>
     <string name="zeit">Zeit:</string>
-    <string name="musterzeit">124sec</string>
+    <string name="musterzeit"> - </string>
+    <string name="start">Startzeit: </string>
+    <string name="stop">Stopzeit: </string>
 
 </resources>

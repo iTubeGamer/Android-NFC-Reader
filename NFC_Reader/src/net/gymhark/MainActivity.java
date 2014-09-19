@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
 	public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     Tag mTag;
+    long starttime;
     public TextView mTextView;
     private NfcAdapter mNfcAdapter;
     public final static String SCHUELER_ID = "net.gymhark.nfcreader.schuelerid";
