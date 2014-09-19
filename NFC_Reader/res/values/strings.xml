@@ -10,6 +10,6 @@
     <string name="error_writing">Error writing!</string>
     <string name="ok_detection">Ok detection!</string>
     <string name="nfctype">Tag beschreiben:</string>
-    <string name="write">Beschreiben</string>
+    <string name="write">Modus wechseln</string>
 
 </resources>

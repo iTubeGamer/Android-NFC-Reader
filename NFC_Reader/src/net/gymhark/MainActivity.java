@@ -1,6 +1,7 @@
 package net.gymhark;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import android.app.Activity;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +32,16 @@ public class MainActivity extends Activity {
     Tag mTag;
     public TextView mTextView;
     private NfcAdapter mNfcAdapter;
-
+    private boolean readmode;
+    
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (readmode = true){
+		} else if (readmode = false) {
+		} else {
+			readmode = true;
+		};
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	    Button btnWrite = (Button) findViewById(R.id.button);
@@ -57,10 +65,19 @@ public class MainActivity extends Activity {
 	    btnWrite.setOnClickListener(new View.OnClickListener()
 	    {
 	        @Override
-	        public void onClick(View v) {
-	        	
+	        public void onClick(View v) {	
+	        	TextView tvmode = (TextView) findViewById(R.id.tvMode);
+	        	if (readmode ==(true)){
+	        		readmode = false;
+	        		tvmode.setText("Writing Mode");
+	        	} else {
+	        		readmode = true;
+	        		tvmode.setText("Reading Mode");
+	        	}
 	        }
 	    });    
+	    
+	    
 	    handleIntent(getIntent());
 	}
 
@@ -68,7 +85,7 @@ public class MainActivity extends Activity {
 	@Override
     protected void onResume() {
         super.onResume();
-        //It's important, that the activity is in the foreground (resumed). Otherwise
+        //It's important, that the activity is in the foreground (resumed).
         setupForegroundDispatch(this, mNfcAdapter);
     }
      
@@ -82,48 +99,63 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onNewIntent(Intent intent){
-		System.out.println("ja nfc ist da!!!! heeeeeeeeeeeeeeeeeeee");
-			//handleIntent(intent);
-			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			String nfcMessage = "hallo du penis!";
-	        Toast.makeText(this, this.getString(R.string.ok_detection), Toast.LENGTH_LONG ).show();
-	        writeTag(this, tag, nfcMessage);
+			handleIntent(intent);
+			
 	}
+	
 	
 	private void handleIntent(Intent intent) { 
 		
-		mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-		  String action = intent.getAction();
-		    if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-		    	System.out.println("ACTION_NDEF_DISCOVERED");
-		        String type = intent.getType();
-		        if (MIME_TEXT_PLAIN.equals(type)) {
-		 
-		            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-		            new NdefReaderTask();
-					NdefReaderTask.setContext(this);
-		            new NdefReaderTask().execute(tag);
-		             
-		        } else {
-		        	System.out.println("wrong mime type" + type);
-		            Log.d(TAG, "Wrong mime type: " + type);
-		        }
-		    } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-		    	System.out.println("ACTION_TECH_DISCOVERED");
-		        // In case we would still use the Tech Discovered Intent
-		        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-		        String[] techList = tag.getTechList();
-		        String searchedTech = Ndef.class.getName();
-		         
-		        for (String tech : techList) {
-		            if (searchedTech.equals(tech)) {
-		            	new NdefReaderTask();
+		if (readmode ==(true)){
+			Toast.makeText(this, "Reading...", Toast.LENGTH_SHORT ).show();
+			System.out.println("reading...");
+			mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			  String action = intent.getAction();
+			    if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+			    	System.out.println("ACTION_NDEF_DISCOVERED");
+			        String type = intent.getType();
+			        if (MIME_TEXT_PLAIN.equals(type)) {
+			        	System.out.println("Nice: plain Text!");
+			            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			            new NdefReaderTask();
 						NdefReaderTask.setContext(this);
-		                new NdefReaderTask().execute(tag);
-		                break;
-		            }
-		        }
-		    }
+			            new NdefReaderTask().execute(tag);
+			             
+			        } else {
+			        	Toast.makeText(this, "No Plain Text!", Toast.LENGTH_SHORT ).show();
+			        	System.out.println("not plain text:" + type);
+			            Log.d(TAG, "Wrong mime type: " + type);
+			        }
+			    } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+			    	System.out.println("ACTION_TECH_DISCOVERED");
+			        // In case we would still use the Tech Discovered Intent
+			        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			        String[] techList = tag.getTechList();
+			        String searchedTech = Ndef.class.getName();
+			         
+			        for (String tech : techList) {
+			            if (searchedTech.equals(tech)) {
+			            	String type = intent.getType();
+			            	 if (MIME_TEXT_PLAIN.equals(type)) {
+			            	new NdefReaderTask();
+							NdefReaderTask.setContext(this);
+			                new NdefReaderTask().execute(tag);
+			                break;
+			            	 }
+			            }
+			        }
+			    } else {
+			    	 System.out.println("Tag not recognized!");
+			    	 Toast.makeText(this, "Tag not recognized!", Toast.LENGTH_SHORT ).show();
+			    }
+    	} else {
+    		EditText etwrite = (EditText) findViewById(R.id.etTagWrite);
+			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			String nfcMessage = etwrite.getText().toString();
+	        writeTag(this, tag, nfcMessage);
+    	}
+	
+		
     }
 	
 	 public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
@@ -152,14 +184,16 @@ public class MainActivity extends Activity {
 	     * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
 	     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
 	     */
+	 
+	 
 	    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
 	        adapter.disableForegroundDispatch(activity);
 	    }
 	    
-	    public static boolean writeTag(Context context, Tag tag, String data) {
+	    
+	    public  boolean writeTag(Context context, Tag tag, String data) {
 	        // Record to launch Play Store if app is not installed
 	        NdefRecord appRecord = NdefRecord.createApplicationRecord(context.getPackageName());
-
 	        // Record with actual data we care about
 	        NdefRecord relayRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
 	                                                new String("application/" + context.getPackageName())
@@ -168,7 +202,7 @@ public class MainActivity extends Activity {
 
 	        // Complete NDEF message with both records
 	        NdefMessage message = new NdefMessage(new NdefRecord[] {relayRecord, appRecord});
-
+	    	Toast.makeText(this, "Writing...", Toast.LENGTH_SHORT ).show();
 	        try {
 	            // If the tag is already formatted, just write the message to it
 	            Ndef ndef = Ndef.get(tag);
@@ -176,29 +210,29 @@ public class MainActivity extends Activity {
 	                ndef.connect();
 
 	                // Make sure the tag is writable
-	                if(!ndef.isWritable()) {	           
+	                if(!ndef.isWritable()) {	  
+	                	Toast.makeText(this, "Not Writable", Toast.LENGTH_SHORT ).show();
 	                    return false;
 	                }
 
 	                // Check if there's enough space on the tag for the message
-	                
-
 	                try {
 	                    // Write the data to the tag
 	                    ndef.writeNdefMessage(message);
 	                    return true;
 	                } catch (TagLostException tle) {
-	               
+	                	Toast.makeText(this, "exception tag lost", Toast.LENGTH_LONG ).show();
 	                    return false;
 	                } catch (IOException ioe) {
-	                    
+	                	Toast.makeText(this, "IO excpetion", Toast.LENGTH_LONG ).show();
 	                    return false;
 	                } catch (FormatException fe) {
-	                  
+	                	Toast.makeText(this, "format exception", Toast.LENGTH_LONG ).show();
 	                    return false;
 	                }
 	            // If the tag is not formatted, format it with the message
 	            } else {
+	            	Toast.makeText(this, "not formatted", Toast.LENGTH_SHORT ).show();
 	                NdefFormatable format = NdefFormatable.get(tag);
 	                if(format != null) {
 	                    try {
@@ -206,20 +240,27 @@ public class MainActivity extends Activity {
 	                        format.format(message);
 	                        return true;
 	                    } catch (TagLostException tle) {
+	                    	Toast.makeText(this, "exception tag lost", Toast.LENGTH_LONG ).show();
 	                        return false;
 	                    } catch (IOException ioe) {
+	                    	Toast.makeText(this, "io exception", Toast.LENGTH_LONG ).show();
 	                        return false;
 	                    } catch (FormatException fe) {
+	                    	Toast.makeText(this, "format exception", Toast.LENGTH_LONG ).show();
 	                        return false;
 	                    }
 	                } else {
+	                	Toast.makeText(this, "else random fail", Toast.LENGTH_LONG ).show();
 	                    return false;
 	                }
 	            }
 	        } catch(Exception e) {
+	        	Toast.makeText(this, "general exception e", Toast.LENGTH_SHORT ).show();
 	        }
 
 	        return false;
 	    }
+	    
+	   
 
 }
