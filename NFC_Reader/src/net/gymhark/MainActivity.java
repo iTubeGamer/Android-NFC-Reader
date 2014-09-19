@@ -152,7 +152,12 @@ public class MainActivity extends Activity {
     		EditText etwrite = (EditText) findViewById(R.id.etTagWrite);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			String nfcMessage = etwrite.getText().toString();
-	        writeTag(this, tag, nfcMessage);
+	        try {
+				writeTag(this, tag, nfcMessage);
+			} catch (IOException | FormatException e) {
+				System.out.println("ioexception while writing");
+				e.printStackTrace();
+			}
     	}
 	
 		
@@ -191,76 +196,42 @@ public class MainActivity extends Activity {
 	    }
 	    
 	    
-	    public  boolean writeTag(Context context, Tag tag, String data) {
-	        // Record to launch Play Store if app is not installed
-	        NdefRecord appRecord = NdefRecord.createApplicationRecord(context.getPackageName());
-	        // Record with actual data we care about
-	        NdefRecord relayRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
-	                                                new String("application/" + context.getPackageName())
-	                                                .getBytes(Charset.forName("US-ASCII")),
-	                                                null, data.getBytes());
-
-	        // Complete NDEF message with both records
-	        NdefMessage message = new NdefMessage(new NdefRecord[] {relayRecord, appRecord});
-	    	Toast.makeText(this, "Writing...", Toast.LENGTH_SHORT ).show();
-	        try {
-	            // If the tag is already formatted, just write the message to it
-	            Ndef ndef = Ndef.get(tag);
-	            if(ndef != null) {
-	                ndef.connect();
-
-	                // Make sure the tag is writable
-	                if(!ndef.isWritable()) {	  
-	                	Toast.makeText(this, "Not Writable", Toast.LENGTH_SHORT ).show();
-	                    return false;
-	                }
-
-	                // Check if there's enough space on the tag for the message
-	                try {
-	                    // Write the data to the tag
-	                    ndef.writeNdefMessage(message);
-	                    return true;
-	                } catch (TagLostException tle) {
-	                	Toast.makeText(this, "exception tag lost", Toast.LENGTH_LONG ).show();
-	                    return false;
-	                } catch (IOException ioe) {
-	                	Toast.makeText(this, "IO excpetion", Toast.LENGTH_LONG ).show();
-	                    return false;
-	                } catch (FormatException fe) {
-	                	Toast.makeText(this, "format exception", Toast.LENGTH_LONG ).show();
-	                    return false;
-	                }
-	            // If the tag is not formatted, format it with the message
-	            } else {
-	            	Toast.makeText(this, "not formatted", Toast.LENGTH_SHORT ).show();
-	                NdefFormatable format = NdefFormatable.get(tag);
-	                if(format != null) {
-	                    try {
-	                        format.connect();
-	                        format.format(message);
-	                        return true;
-	                    } catch (TagLostException tle) {
-	                    	Toast.makeText(this, "exception tag lost", Toast.LENGTH_LONG ).show();
-	                        return false;
-	                    } catch (IOException ioe) {
-	                    	Toast.makeText(this, "io exception", Toast.LENGTH_LONG ).show();
-	                        return false;
-	                    } catch (FormatException fe) {
-	                    	Toast.makeText(this, "format exception", Toast.LENGTH_LONG ).show();
-	                        return false;
-	                    }
-	                } else {
-	                	Toast.makeText(this, "else random fail", Toast.LENGTH_LONG ).show();
-	                    return false;
-	                }
-	            }
-	        } catch(Exception e) {
-	        	Toast.makeText(this, "general exception e", Toast.LENGTH_SHORT ).show();
-	        }
-
-	        return false;
+	    private void writeTag(Context context, Tag tag, String data) throws IOException, FormatException {
+	    	 NdefRecord[] records = { createRecord(data)};
+	    	    NdefMessage message = new NdefMessage(records); 
+	    	    Ndef ndef = Ndef.get(tag);
+	    	    ndef.connect();
+	    	    try {
+                    // Write the data to the tag
+                    ndef.writeNdefMessage(message);
+                } catch (TagLostException tle) {
+                	Toast.makeText(this, "exception tag lost", Toast.LENGTH_LONG ).show();
+                } catch (IOException ioe) {
+                	Toast.makeText(this, "IO excpetion", Toast.LENGTH_LONG ).show();
+                } catch (FormatException fe) {
+                	Toast.makeText(this, "format exception", Toast.LENGTH_LONG ).show();
+                }
+	    	    ndef.close();
 	    }
 	    
-	   
+	    private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
+
+	        //create the message in according with the standard
+	        String lang = "de";
+	        byte[] textBytes = text.getBytes();
+	        byte[] langBytes = lang.getBytes("US-ASCII");
+	        int langLength = langBytes.length;
+	        int textLength = textBytes.length;
+
+	        byte[] payload = new byte[1 + langLength + textLength];
+	        payload[0] = (byte) langLength;
+
+	        // copy langbytes and textbytes into payload
+	        System.arraycopy(langBytes, 0, payload, 1, langLength);
+	        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
+
+	        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
+	        return recordNFC;
+	    }
 
 }
