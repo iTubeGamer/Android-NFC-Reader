@@ -1,13 +1,22 @@
 package net.gymhark;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +30,7 @@ public class MainActivity extends Activity {
     Tag mTag;
     public TextView mTextView;
     private NfcAdapter mNfcAdapter;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +83,15 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onNewIntent(Intent intent){
 		System.out.println("ja nfc ist da!!!! heeeeeeeeeeeeeeeeeeee");
-			handleIntent(intent);
+			//handleIntent(intent);
+			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			String nfcMessage = "hallo du penis!";
 	        Toast.makeText(this, this.getString(R.string.ok_detection), Toast.LENGTH_LONG ).show();
+	        writeTag(this, tag, nfcMessage);
 	}
 	
-	private void handleIntent(Intent intent) {
+	private void handleIntent(Intent intent) { 
+		
 		mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 		  String action = intent.getAction();
 		    if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
@@ -140,6 +154,72 @@ public class MainActivity extends Activity {
 	     */
 	    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
 	        adapter.disableForegroundDispatch(activity);
+	    }
+	    
+	    public static boolean writeTag(Context context, Tag tag, String data) {
+	        // Record to launch Play Store if app is not installed
+	        NdefRecord appRecord = NdefRecord.createApplicationRecord(context.getPackageName());
+
+	        // Record with actual data we care about
+	        NdefRecord relayRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
+	                                                new String("application/" + context.getPackageName())
+	                                                .getBytes(Charset.forName("US-ASCII")),
+	                                                null, data.getBytes());
+
+	        // Complete NDEF message with both records
+	        NdefMessage message = new NdefMessage(new NdefRecord[] {relayRecord, appRecord});
+
+	        try {
+	            // If the tag is already formatted, just write the message to it
+	            Ndef ndef = Ndef.get(tag);
+	            if(ndef != null) {
+	                ndef.connect();
+
+	                // Make sure the tag is writable
+	                if(!ndef.isWritable()) {	           
+	                    return false;
+	                }
+
+	                // Check if there's enough space on the tag for the message
+	                
+
+	                try {
+	                    // Write the data to the tag
+	                    ndef.writeNdefMessage(message);
+	                    return true;
+	                } catch (TagLostException tle) {
+	               
+	                    return false;
+	                } catch (IOException ioe) {
+	                    
+	                    return false;
+	                } catch (FormatException fe) {
+	                  
+	                    return false;
+	                }
+	            // If the tag is not formatted, format it with the message
+	            } else {
+	                NdefFormatable format = NdefFormatable.get(tag);
+	                if(format != null) {
+	                    try {
+	                        format.connect();
+	                        format.format(message);
+	                        return true;
+	                    } catch (TagLostException tle) {
+	                        return false;
+	                    } catch (IOException ioe) {
+	                        return false;
+	                    } catch (FormatException fe) {
+	                        return false;
+	                    }
+	                } else {
+	                    return false;
+	                }
+	            }
+	        } catch(Exception e) {
+	        }
+
+	        return false;
 	    }
 
 }
