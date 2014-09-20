@@ -25,5 +25,7 @@
     <string name="musterzeit"> - </string>
     <string name="start">Startzeit: </string>
     <string name="stop">Stopzeit: </string>
+    <string name="scannedTags">Gescannte NFC-Tags:</string>
+    <string name="clear">Löschen</string>
 
 </resources>

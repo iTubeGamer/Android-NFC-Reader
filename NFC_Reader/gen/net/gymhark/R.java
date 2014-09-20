@@ -38,26 +38,29 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class id {
         public static final int LinearLayout2=0x7f0a0000;
-        public static final int action_settings=0x7f0a000f;
+        public static final int action_settings=0x7f0a0011;
+        public static final int btClear=0x7f0a000f;
         public static final int btnZuweisen=0x7f0a0006;
         public static final int etId=0x7f0a0005;
         public static final int etSchueler=0x7f0a0003;
-        public static final int imageView1=0x7f0a000b;
-        public static final int progressBar1=0x7f0a000e;
+        public static final int imageView1=0x7f0a000c;
+        public static final int lvTags=0x7f0a0010;
         public static final int tab1=0x7f0a0001;
         public static final int tab2=0x7f0a0007;
+        public static final int tab3=0x7f0a0008;
         public static final int textView1=0x7f0a0002;
         public static final int textView2=0x7f0a0004;
-        public static final int textView3=0x7f0a0009;
-        public static final int tvId=0x7f0a000a;
-        public static final int tvSchueler=0x7f0a0008;
-        public static final int tvSchuelerZeit=0x7f0a000d;
-        public static final int tvgetSchuelerId=0x7f0a000c;
+        public static final int textView3=0x7f0a000a;
+        public static final int tvId=0x7f0a000b;
+        public static final int tvSchueler=0x7f0a0009;
+        public static final int tvSchuelerZeit=0x7f0a000e;
+        public static final int tvgetSchuelerId=0x7f0a000d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_write_to_tag=0x7f030001;
         public static final int tab2=0x7f030002;
+        public static final int tabscans=0x7f030003;
     }
     public static final class menu {
         public static final int main=0x7f090000;
@@ -66,6 +69,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class string {
         public static final int action_settings=0x7f070002;
         public static final int app_name=0x7f070000;
+        public static final int clear=0x7f070019;
         public static final int dummy_button=0x7f07000f;
         public static final int dummy_content=0x7f070010;
         public static final int error_detected=0x7f070004;
@@ -80,6 +84,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ok_detection=0x7f070007;
         public static final int ok_writing=0x7f070005;
         public static final int ready=0x7f070011;
+        public static final int scannedTags=0x7f070018;
         public static final int schueler=0x7f07000a;
         public static final int start=0x7f070016;
         public static final int stop=0x7f070017;

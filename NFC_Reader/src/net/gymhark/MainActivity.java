@@ -1,11 +1,9 @@
 package net.gymhark;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -21,17 +19,19 @@ import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnTabChangeListener{
 	public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     Tag mTag;
@@ -40,6 +40,12 @@ public class MainActivity extends Activity {
     private NfcAdapter mNfcAdapter;
     public final static String SCHUELER_ID = "net.gymhark.nfcreader.schuelerid";
     public final static String SCHUELER_NAME = "net.gymhark.nfcreader.schuelername";
+    public final static String TAB_1_TAG = "Zuweisen";
+    public final static String TAB_2_TAG = "Auslesen";
+    public final static String TAB_3_TAG = "Verlauf";
+    ArrayAdapter<String> tagVerlaufAdapter;
+    List<String> TagList = new ArrayList<String>();
+    private ScanTagDataSource datasource = new ScanTagDataSource(this);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +63,20 @@ public class MainActivity extends Activity {
 		spec2.setIndicator("Auslesen");
 		spec2.setContent(R.id.tab2);
 		
+		TabSpec spec3=tabHost.newTabSpec("Verlauf");
+		spec3.setIndicator("Veraluf");
+		spec3.setContent(R.id.tab3);
+		
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
+		tabHost.addTab(spec3);
+		
+		
+		tabHost.setOnTabChangedListener(this);
+		
 		
 	    Button btnWrite = (Button) findViewById(R.id.btnZuweisen);
+	    Button btclear = (Button) findViewById(R.id.btClear);
 	    mTextView = (TextView)findViewById(R.id.textView1);
 	    mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 	    
@@ -77,6 +93,14 @@ public class MainActivity extends Activity {
         } else {
         	System.out.println("Ob das so richtig ist...");
         }
+        
+        btclear.setOnClickListener(new View.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(View v) {
+	        	//löschen...
+	        }
+	    });
         
 	    btnWrite.setOnClickListener(new View.OnClickListener()
 	    {
@@ -227,6 +251,32 @@ public class MainActivity extends Activity {
 	        return recordNFC;
 	    }
 	    
-	
+	    public void makeToast (String message) {
+	    	Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	    }
+
+		@Override
+		public void onTabChanged(String tabId) {
+			  if(TAB_1_TAG.equals(tabId)) {
+			    
+			    }
+			    if(TAB_2_TAG.equals(tabId)) {
+			    	
+			    }
+			    if(TAB_3_TAG.equals(tabId)) {
+			    	TagList.clear();
+			    	try {
+		       	 		datasource.open();
+		       	 		TagList = datasource.getAllScanTags();
+		       	 		datasource.close();
+		        	} catch (Exception ex){
+		        		Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
+		        	}
+			    	
+			    	tagVerlaufAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, TagList);
+			    	ListView lvTags = (ListView) findViewById(R.id.lvTags);
+			    	lvTags.setAdapter(tagVerlaufAdapter);
+			    }
+		}
 
 }

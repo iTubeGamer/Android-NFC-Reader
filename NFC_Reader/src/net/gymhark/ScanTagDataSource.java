@@ -17,7 +17,7 @@ public class ScanTagDataSource {
 	
 	// Database fields
 	private SQLiteDatabase database;
-	private MySQLiteHelper dbHelper;
+	private MySQLiteHelper dbHelper; 
 	private String[] allColumns = { "ID",
 			"SCHUELERID", "TIME"};
 
@@ -73,25 +73,28 @@ public class ScanTagDataSource {
 		database.update("SCANTAG", args, "ID = " + id, null);
 	}
 	
-	public List<ScanTag> getAllScanTags() {
+	public List<String> getAllScanTags() {
 		List<ScanTag> scantaglist = null;
+		ArrayList<String> scantagliststring = null;
 		scantaglist = new ArrayList<ScanTag>();
+		scantagliststring = new ArrayList<String>();
 		
 		Cursor cursor = database.query("SCANTAG",
 				allColumns, null, null, null, null, null);
 		cursor.moveToFirst();
 		
-		if(cursor.getCount() == 0) return scantaglist;
+		if(cursor.getCount() == 0) return scantagliststring;
 		
 		while (!cursor.isAfterLast()) {
 			ScanTag si = cursorToScanTag(cursor);
 			scantaglist.add(si);
+			scantagliststring.add(si.toString());
 			cursor.moveToNext();
 		} 	
 		// Make sure to close the cursor
 		cursor.close();
 		
-		return scantaglist;
+		return scantagliststring;
 	}
 
 	

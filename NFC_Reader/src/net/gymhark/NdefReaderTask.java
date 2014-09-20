@@ -15,7 +15,6 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 

@@ -4,6 +4,7 @@ public class ScanTag {
 	private long id;
 	private int schuelerid;
 	private long time;
+	private String ergebnis;
 
 	public long getId() {
 		return id;
@@ -28,5 +29,10 @@ public class ScanTag {
 
 	public void settime(long time) {
 		 this.time = time;
+	}
+	
+	public String toString() {
+		ergebnis = "Schueler-ID: " + String.valueOf(this.schuelerid) + ", Zeit: " + String.valueOf(this.time);
+		return ergebnis;
 	}
 }
